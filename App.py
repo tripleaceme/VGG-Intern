@@ -13,30 +13,20 @@ password = []
 amount = []
 if (option == 1):
     username = input("Enter your user ID: ")
-    #user_id.append(username)
-    while True:
-        found_user_id = False
-        for user in user_id:
-            if (username == user):
-                found_user_id = True
-                print("Username not available")
-            else:
-                user_id.append(username)
-    
+    user_id.append(username)
+    #for user in user_id:
+        #if (username == user):
+            #print("Username not available")
+            #exit()
+        #else:
     login = input("Choose a password between 5 - 8 characters: ")
     password.append(login)
-    deposit = int(input("How Much do you want to open your account with: "))
-    if (len(deposit) < 3):
-        print("Enter real value")
-        deposit = int(input("How Much do you want to open your account with: "))
-    else:
-        amount.append(deposit)
-        print("Your account with the USER ID {} has been Successsfully created.".format(user_id))
-        print("Press 2 to perform your first transaction")
-        print("Press 3 to exit")
+    deposit = input("How Much do you want to open your account with: ")
+    amount.append(int(deposit))
+    print("Your account with the USER ID {} has been Successsfully created.".format(user_id))
+    print("The User Id saved = {}, Passwords = {} and amount = {}".format(user_id,password,amount))
 
-elif (option == 2):
-
+elif(option == 2):
     username = input("Enter your user ID: ")
     user_id.append(username)
     if(user_id == username):
@@ -57,4 +47,7 @@ elif (option == 2):
             print("Press 3 to exit")
 else:
     print("Thank you for Banking with us.")
-    exit()
+
+print(user_id)
+print(password)
+print(amount)
