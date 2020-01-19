@@ -27,21 +27,7 @@ if (option == 1):
     print("The User Id saved = {}, Passwords = {} and amount = {}".format(user_id,password,amount))
 
 elif(option == 2):
-    username = input("Enter your user ID: ")
-    user_id.append(username)
-    if(user_id == username):
-        print("User ID already exist. Please choose a new one")
-        username = input("Enter your user ID: ")
-        user_id.append(username)
-    else:
-        login = input("Choose a password between 5 - 8 characters: ")
-        password.append(login)
-        deposit = int(input("How Much do you want to open your account with: "))
-        if (len(deposit) < 3):
-            print("Enter real value")
-            deposit = int(input("How Much do you want to open your account with: "))
-        else:
-            amount.append(deposit)
+    
             print("Your account with the USER ID {} has been Successsfully created.".format(user_id))
             print("Press 2 to perform your first transaction")
             print("Press 3 to exit")
