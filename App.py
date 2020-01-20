@@ -113,7 +113,7 @@ def App():
                             Enter 1: Create Account
                             Enter 2: Transaction
                             Enter 0: Exit ''')
-    # loop ensures that the user input is 1 or 2
+    # loop ensures that the user input is 1 or 2 or 0
     while True:
         if user_input == '1' or user_input == '2' or user_input == '0':
             break
@@ -122,7 +122,7 @@ def App():
             user_input = input('''
                             Enter 1: create account
                             Enter 2: transaction
-                            Enter 0: Exit ''')
+                            ''')
         
     # Creating Account
     if (user_input == '1'):
@@ -158,7 +158,7 @@ def App():
                                         Enter 3: withdraw
                                         Enter 4: transfer
                                         Enter 5: Start Program All Over
-                                        Enter 0: exit
+                                        
                                 ''')
         if operation_options == '5':
             App()
