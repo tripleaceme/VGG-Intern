@@ -98,7 +98,38 @@ def withdraw(user):
         print("Withdrawal successful. Available balance is {}".format(avail_bal))
         print("Thank you for banking with us")
 
+# function to transfer money given user        
+def tranfer(user):
+    amount = input('please enter the amount you want to transfer\n')
+    while(True) :
+        try:
+            user_amount = float(amount)
+            if user_amount > 0.0:
+                break
+            else:
+                print('invalid amount\n')
+                amount = input('please enter the amount you want to transfer\n')
+        except ValueError:
+            print('invalid amount\n')
+            amount = input('please enter the amount you want to transfer\n')
+    if float(user['balance']) < user_amount:
+        print('insufficent balance')
+    else:
+        receiver = input('please enter beneficiary\'s email address \n')
+        while(True):
+            beneficiary = duplicate_account('email',receiver.lower())
 
+            if beneficiary:
+                break
+            print('No account is associated with the given email\n')
+            receiver = input('please enter beneficiaries email address\n')
+        
+        beneficiary_balance = float(beneficiary['balance']) + user_amount
+        sender_balance = user['balance'] - user_amount
+        beneficiary['balance'] = beneficiary_balance
+        user['balance'] = sender_balance
+        print('you have successfully transfered {sent_amount} to {reciever}, your balance is now {new_balance}'.format(sent_amount = user_amount, reciever = beneficiary['email'], new_balance = user['balance']))
+        
 
         
 def App():
