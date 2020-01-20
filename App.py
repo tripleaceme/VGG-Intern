@@ -1,206 +1,149 @@
-"""
-A command line banking application with the following:
-- Create account
-- Perform transactions when user is authenticated
-    - Check balance
-    - Deposit funds
-    - Withdraw funds
-    - Transfer funds
-"""
+registered_users = { 
+            'Abel' : { 'password' : 'tripleace', 'balance' : 1200 },
+            'mario':{'password':'mario', 'balance':5000},
+            'prosper': {'password':'prosper', 'balance':4500},
+            'theo': {'password':'theo', 'balance':4000} 
+            }
 
-# dict of users to be used
-registered_users =[
-    {'email_add':'mario@vgg.com','password':'mario', 'balance':5000},
-    {'email_add':'prosper@vgg.com', 'password':'prosper', 'balance':4500},
-    {'email_add':'theo@vgg.com', 'password':'theo', 'balance':4000}]
+#Initialize balance to 0
+balance = 0
+def create_account() :
 
-# function creates a new user
-def create_account():
-    email = input('please enter an email address: ').lower()
-    while True:            
-        if ("@" in email) and ("." in email):
-            # The loop checks if the user with the given email  already exist
-            while True:
-                if not duplicate_account('email_add',email):
-                    break
-                else:
-                    print('An account with the email  already exist.')
-                    email = input('please enter an email address: ').lower()
-            break
-        else:
-            print("enter a correct email address e.g myself@yourwebsite.com")
-            email = input('please enter an email address: ').lower()
-    password = input('please choose a password: ')
-    # loop makes sure user chooses a character at least 4 character long
-    while True:
-        if (len(password) > 4):
-            break
-        else:
-            print('password must be at least four characters')
-            password = input('please choose a password: ')
-    # add the new user to users database
-    new_user = {'email_add':email, 'password':password, 'balance': 0}
-    registered_users.append(new_user)
-    print('{} successfully created'.format(email))
+    email = input("please enter an email address: ").lower()
+    # The loop checks if the user with the given email  already exist
+    if email in registered_users.keys() :
 
-
-# This function checks if user already exist
-# checker represents the value we are trying to see if it has already exist in the DB
-# value is the new user input that is been compared against what we have in the DB
-
-def duplicate_account(checker, value):
-    for user in registered_users:
-        if user[checker] == value:
-            return user
-    return False
-
-
-# This function checks if user already exist
-# checker represents the value we are trying to see if it has already exist in the DB
-# value is the new user input that is been compared against what we have in the DB
-
-def authenticate_user(checker, value):
-    for user in registered_users:
-        if user[checker] == value:
-            return user
-    return False
-
-def check_balance(user):
-    print('Your account balance is {}'.format(user['balance']))
-
-
-def deposit(user):
-    deposit_money = int(input("Enter an amount to be deposited"))
-    while True:
-        try:
-            if deposit_money > 0:
-                break
-            else:
-                print("Invalid amount, only figures are allowed")
-                deposit_money = int(input("Enter an amount to be deposited"))
-        except ValueError:
-            print("Invalid amount, please enter figures only")
-            deposit_money = int(input("Enter an amount to be deposited"))
-    old_bal = registered_users[user]["balance"]
-    new_bal = old_bal + deposit_money
-    registered_users[user]["balance"] = new_bal
-    print("You have deposited {}, Your new balance is {}".format(deposit_money,new_bal))
-    print("Thank you for banking with us")
-
-def withdraw(user):
-    withdrawal = int(input("How much do you want to widthraw: "))
-    balance = registered_users[user]["balance"]
-    if (withdrawal > balance):
-        print("Insufficient amount. Kindly fund your account")
-        deposit(user)
-    else:
-        avail_bal = balance - withdrawal
-        print("Withdrawal successful. Available balance is {}".format(avail_bal))
-        print("Thank you for banking with us")
-
-# function to transfer money given user        
-def tranfer(user):
-    amount = input('please enter the amount you want to transfer\n')
-    while(True) :
-        try:
-            user_amount = float(amount)
-            if user_amount > 0.0:
-                break
-            else:
-                print('invalid amount\n')
-                amount = input('please enter the amount you want to transfer\n')
-        except ValueError:
-            print('invalid amount\n')
-            amount = input('please enter the amount you want to transfer\n')
-    if float(user['balance']) < user_amount:
-        print('insufficent balance')
-    else:
-        receiver = input('please enter beneficiary\'s email address \n')
-        while(True):
-            beneficiary = duplicate_account('email',receiver.lower())
-
-            if beneficiary:
-                break
-            print('No account is associated with the given email\n')
-            receiver = input('please enter beneficiaries email address\n')
-        
-        beneficiary_balance = float(beneficiary['balance']) + user_amount
-        sender_balance = user['balance'] - user_amount
-        beneficiary['balance'] = beneficiary_balance
-        user['balance'] = sender_balance
-        print('you have successfully transfered {sent_amount} to {reciever}, your balance is now {new_balance}'.format(sent_amount = user_amount, reciever = beneficiary['email'], new_balance = user['balance']))
-        
-
-        
-def App():
-    print("""
-          Welcome to VGG Bank Ltd
-      We hope to serve you better today.
-              """)
-
-
-
-    user_input = input('''
-                            Enter 1: Create Account
-                            Enter 2: Transaction
-                            Enter 0: Exit ''')
-    # loop ensures that the user input is 1 or 2 or 0
-    while True:
-        if user_input == '1' or user_input == '2' or user_input == '0':
-            break
-        else:
-            print('Incorrect Input, Enter either 1 or 2 or 0')    
-            user_input = input('''
-                            Enter 1: create account
-                            Enter 2: transaction
-                            ''')
-        
-    # Creating Account
-    if (user_input == '1'):
-        create_account()
-    else:
-        #ask user for their password
-        password = input('please enter your password: ')
-        # check if password is correct
-        user_pass = authenticate_user('password', password)
-        # if password is not correct return back to the set of options
-        if not user_pass:
-            print('password incorrect, you are not authorized')
-            App()
-        # if password is correct
-        # makes sure user chooses from available options
-        else:
-            print('Choose an option')
-            operation_options = input('''
-                                    Enter 1: check balance
-                                    Enter 2: deposit
-                                    Enter 3: withdraw
-                                    Enter 4: transfer
-                                    Enter 0: exit
-                            ''')
+        print("Sorry! Account already exists")
+        # Go back to the account creation page
+        App()
+    else :    
+        # Take password for the new account.
+        password = input("please choose a password: ")
+        # loop makes sure user chooses a character at least 4 character long
         while True:
-            if operation_options == '0' or operation_options == '1' or operation_options == '2' or operation_options == '3' or operation_options == '4' or operation_options == '0':
+            if (len(password) > 4):
                 break
             else:
-                print('Choose the correct option')
-                operation_options = input('''
-                                        Enter 1: check balance
-                                        Enter 2: deposit
-                                        Enter 3: withdraw
-                                        Enter 4: transfer
-                                        Enter 5: Start Program All Over
-                                        
-                                ''')
-        if operation_options == '5':
+                print("password must be at least five characters")
+                password = input("please choose a password: ")
+    # add the new user to users database
+    registered_users[email] = { 'password' : password, 'balance' : balance }
+    print("{} successfully created.".format(email))
+    # Go home
+    App()
+
+def transaction() :
+    # Take an account name for account login
+    email = input("Enter email associated with your account: ").lower()
+    # Check if account name exists in the data base.
+    if email in registered_users.keys() :
+        # Take password for the new account.
+        password = input("Enter password here: ")
+        # Authenticate login
+        if password == registered_users[email]['password'] :
+            print("""
+                Select an option below.
+                Press 1 to check balance.
+                Press 2 to deposit.
+                Press 3 to withdraw cash.
+                Press 4 to transfer funds.
+                """)
+            # Take choice of transaction selection
+            choice = int(input("Enter your preferred selection here: "))
+            if choice == 1:
+                check_balance(email)
+            elif choice == 2 :
+                deposit_cash(email)
+            elif choice == 3 :
+                withdraw_cash(email)
+            elif choice == 4 :
+                transfer_cash(email)
+            else :
+                print("Not a valid key. Try again!")
+                # Go home
+                App()
+        else :
+            print("password incorrect, you are not authorized")
+            # Go home
             App()
-        elif operation_options == '1':
-            check_balance(user)
-        elif operation_options == '2':
-            deposit(user)
-        elif operation_options == '3':
-            withdraw(user)
-        elif operation_options == '4':
-            transfer(user)
-        else:
-            exit()
+    else :
+        print("Account Name not found. Kindly Register")
+        # Go home
+        App()
+
+
+def check_balance(email) :
+
+    print("Your balance is {}".fotmat(registered_users[email]['balance']))
+    # Go home
+    App()
+
+def deposit_cash(email) :
+    balance = registered_users[email]['balance']
+    amount = int( input("Enter the amount you want to deposit here: ") )
+    balance += amount
+    # Update Account balance
+    registered_users[email]['balance'] = balance
+    print("Your balance is {}".fotmat(registered_users[email]['balance']))
+    # Go home
+    App()
+
+def withdraw_cash(email) :
+    balance = registered_users[email]['balance']
+    amount = int( input("\nEnter the amount you want to withdraw here: ") )
+    balance -= amount
+    # Update balance
+    registered_users[email]['balance'] = balance
+    print("Your balance is {}".fotmat(registered_users[email]['balance']))
+    # Go home
+    App()
+
+def transfer_cash(email) :
+    current_balance = registered_users[email]['balance']
+    beneficiary = input("Enter beneficiary account name here: ").lower()
+    # Check if beneficiary exists in the data store
+    if beneficiary in registered_users.keys() :
+        # Take beneficiary's balance
+        beneficiary_balance = registered_users[beneficiary]['balance']
+        # Take the amount to be transferred
+        amount = int(input("Enter the amount you want to transfer here: ") )
+        # Check if benefactor has enough in his balance
+        if (current_balance < amount) :
+            print("Sorry! Not enough balance for this transaction.")
+            # Go home
+            App()
+        else :
+            beneficiary_balance += amount
+            current_balance -= amount
+            # Update the balance of beneficiary and the depositor
+            registered_users[beneficiary]['balance'] = beneficiary_balance
+            registered_users[email]['balance'] = current_balance
+        print("Your current balance is {}".format(registered_users[email]['balance']))
+        # Go home
+        App()
+    else :
+        print("Error! Beneficiary not found.\nTry again.")
+        # Go home
+        App()
+
+
+def App():
+
+    print("""
+            You are welcome to VGG Bank Ltd. 
+            Make a selection below for your desire choice of service.
+            Press 1 to create an account.
+            Press 2 to conduct a transaction.
+            Press 0 to close app.""")
+    choice_selection = int(input("Enter your preferred selection here: "))
+    # Choose action based on choice selection
+    if choice_selection == 1 :
+        create_account()
+    elif choice_selection == 2 :
+        transaction()
+    elif choice_selection == 0 : 
+        print("\nThanks for using this app. Goodbye!")
+        exit()
+
+
 App()
