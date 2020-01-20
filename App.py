@@ -7,6 +7,8 @@ registered_users = {
 
 #Initialize balance to 0
 balance = 0
+
+#Cretating a new user account
 def create_account() :
 
     email = input("please enter an email address: ").lower()
