@@ -5,6 +5,9 @@ registered_users = {
             'theo': {'password':'theo', 'balance':4000} 
             }
 
+
+
+
 #Initialize balance to 0
 balance = 0
 
